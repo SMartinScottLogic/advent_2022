@@ -1,4 +1,4 @@
-use anyhow::{Context, Result};
+use anyhow::{anyhow, Context, Result};
 use itertools::Itertools;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
@@ -21,14 +21,11 @@ impl Solution {
     pub fn analyse(&mut self) {}
 
     pub fn answer_part1(&self) -> Result<u64> {
-        let mut answer = 0;
-        for elf in &self.elves {
-            let a = elf.iter().sum();
-            if a > answer {
-                answer = a;
-            }
-        }
-        Ok(answer)
+        self.elves
+            .iter()
+            .map(|elf| elf.iter().sum::<u64>())
+            .max()
+            .ok_or_else(|| anyhow!("failed to get maximum"))
     }
 
     pub fn answer_part2(&self) -> Result<u64> {
