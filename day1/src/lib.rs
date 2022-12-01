@@ -1,4 +1,4 @@
-use anyhow::Result;
+use anyhow::{Context, Result};
 use itertools::Itertools;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
@@ -7,11 +7,7 @@ pub fn load(filename: &str) -> anyhow::Result<Solution> {
     let file = File::open(filename)?;
 
     let reader = BufReader::new(file);
-    let mut solution = Solution::new();
-    for line in reader.lines() {
-        let line = line.unwrap();
-        solution.add_entry(&line);
-    }
+    let solution = Solution::try_from(reader).context("")?;
 
     Ok(solution)
 }
@@ -22,21 +18,6 @@ pub struct Solution {
 }
 
 impl Solution {
-    fn new() -> Self {
-        Self {
-            elves: vec![Vec::new()],
-        }
-    }
-
-    fn add_entry(&mut self, entry: &str) {
-        if entry.trim().is_empty() {
-            self.elves.push(Vec::new());
-        } else {
-            let calories = entry.parse().unwrap();
-            self.elves.last_mut().unwrap().push(calories);
-        }
-    }
-
     pub fn analyse(&mut self) {}
 
     pub fn answer_part1(&self) -> Result<u64> {
@@ -60,5 +41,26 @@ impl Solution {
             .take(3)
             .sum::<u64>();
         Ok(answer)
+    }
+}
+
+impl<T: std::io::Read> TryFrom<BufReader<T>> for Solution {
+    type Error = std::io::Error;
+
+    fn try_from(reader: BufReader<T>) -> Result<Self, Self::Error> {
+        let mut solution = Self {
+            elves: vec![Vec::new()],
+        };
+        for line in reader.lines() {
+            let line = line?;
+            let line = line.trim();
+            if line.is_empty() {
+                solution.elves.push(Vec::new());
+            } else {
+                let calories = line.parse().unwrap();
+                solution.elves.last_mut().unwrap().push(calories);
+            }
+        }
+        Ok(solution)
     }
 }
