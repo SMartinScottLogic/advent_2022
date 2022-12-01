@@ -3,5 +3,5 @@
 members = [
     "utils",
     "template",
-    # "day1",
+    "day1",
 ]
