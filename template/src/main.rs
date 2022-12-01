@@ -15,9 +15,14 @@ fn main() -> Result<()> {
     );
     solution.analyse();
     info!(
-        "{}answer is {}",
+        "{}part1 answer is {}",
         Paint::masked("🎅 "),
-        Paint::bold(Paint::red(solution.answer()?))
+        Paint::bold(Paint::red(solution.answer_part1()?))
+    );
+    info!(
+        "{}part2 answer is {}",
+        Paint::masked("🎅 "),
+        Paint::bold(Paint::red(solution.answer_part2()?))
     );
 
     Ok(())
