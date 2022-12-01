@@ -6,9 +6,7 @@ pub fn load(filename: &str) -> anyhow::Result<Solution> {
     let file = File::open(filename)?;
 
     let reader = BufReader::new(file);
-    let solution = Solution::try_from(reader).context("reading input")?;
-
-    Ok(solution)
+    Solution::try_from(reader).context("reading from '{filename}'")
 }
 
 #[derive(Debug)]
