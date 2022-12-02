@@ -1,6 +1,6 @@
 use anyhow::Result;
-use log::info;
 use day2::load;
+use log::info;
 use yansi::Paint;
 
 fn main() -> Result<()> {
