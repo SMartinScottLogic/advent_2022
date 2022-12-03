@@ -30,8 +30,8 @@ impl<T: std::io::Read> TryFrom<BufReader<T>> for Solution {
     type Error = std::io::Error;
 
     fn try_from(reader: BufReader<T>) -> Result<Self, Self::Error> {
-        let mut solution = Self {};
-        for line in reader.lines() {
+        let solution = Self {};
+        for _line in reader.lines() {
             // Implement for problem
         }
         Ok(solution)
