@@ -1,6 +1,6 @@
 use anyhow::Result;
 use log::{error, info};
-use template::load;
+use day5::load;
 use utils::BaseName;
 use yansi::Paint;
 
