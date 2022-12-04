@@ -1,7 +1,7 @@
 use anyhow::Result;
+use day5::Solution;
 use log::{error, info};
-use day5::load;
-use utils::BaseName;
+use utils::{load, BaseName, Solution as UtilsSolution};
 use yansi::Paint;
 
 fn main() -> Result<()> {
@@ -29,7 +29,7 @@ fn main() -> Result<()> {
 }
 
 fn run(filename: &str) -> Result<()> {
-    let mut solution = load(filename)?;
+    let mut solution = load::<Solution>(filename)?;
     info!(
         "{}{}: {:?}",
         Paint::masked("🎄 "),
