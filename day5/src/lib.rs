@@ -1,26 +1,18 @@
-use anyhow::{Context, Result};
-use std::fs::File;
 use std::io::{BufRead, BufReader};
-
-pub fn load(filename: &str) -> anyhow::Result<Solution> {
-    let file = File::open(filename)?;
-
-    let reader = BufReader::new(file);
-    Solution::try_from(reader).context("reading from '{filename}'")
-}
 
 #[derive(Debug)]
 pub struct Solution {}
 
-impl Solution {
-    pub fn analyse(&mut self) {}
+impl utils::Solution for Solution {
+    type Result = anyhow::Result<u64>;
+    fn analyse(&mut self) {}
 
-    pub fn answer_part1(&self) -> Result<u64> {
+    fn answer_part1(&self) -> Self::Result {
         // Implement for problem
         Ok(0)
     }
 
-    pub fn answer_part2(&self) -> Result<u64> {
+    fn answer_part2(&self) -> Self::Result {
         // Implement for problem
         Ok(0)
     }
