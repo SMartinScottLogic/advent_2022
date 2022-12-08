@@ -28,6 +28,18 @@ impl Matrix {
     pub fn dimensions(&self) -> (isize, isize) {
         (self.max_x, self.max_y)
     }
+
+    pub fn display(&self) {
+        for y in 0..=self.max_y {
+            let mut line = String::new();
+            for x in 0..=self.max_x {
+                let v = self.get(x, y).unwrap_or(&0);
+                let v = format!("{v}");
+                line.push_str(&v);
+            }
+            println!("{line}");
+        }
+    }
 }
 
 #[cfg(test)]
