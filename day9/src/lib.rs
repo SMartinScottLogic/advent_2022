@@ -17,46 +17,18 @@ impl utils::Solution for Solution {
     fn analyse(&mut self) {}
 
     fn answer_part1(&self) -> Self::Result {
-        let mut head = (0, 0);
-        let mut tail = (0, 0);
+        let mut head = Position::new();
+        let mut tail = Position::new();
 
         let mut visited = HashMap::new();
-        visited.insert(tail, 1);
+        visited.insert(tail.clone(), 1);
         debug!("{:?} {:?}", head, tail);
         for motion in &self.motions {
-            match motion {
-                Motion::R(count) => {
-                    for _ in 1..=*count {
-                        head.0 += 1;
-                        Self::move_tail(&head, &mut tail);
-                        visited.insert(tail, 1);
-                        debug!("{:?} {:?}", head, tail);
-                    }
-                }
-                Motion::L(count) => {
-                    for _ in 1..=*count {
-                        head.0 -= 1;
-                        Self::move_tail(&head, &mut tail);
-                        visited.insert(tail, 1);
-                        debug!("{:?} {:?}", head, tail);
-                    }
-                }
-                Motion::U(count) => {
-                    for _ in 1..=*count {
-                        head.1 += 1;
-                        Self::move_tail(&head, &mut tail);
-                        visited.insert(tail, 1);
-                        debug!("{:?} {:?}", head, tail);
-                    }
-                }
-                Motion::D(count) => {
-                    for _ in 1..=*count {
-                        head.1 -= 1;
-                        Self::move_tail(&head, &mut tail);
-                        visited.insert(tail, 1);
-                        debug!("{:?} {:?}", head, tail);
-                    }
-                }
+            for _ in 1..=motion.count() {
+                motion.step(&mut head);
+                Self::move_tail(&head, &mut tail);
+                visited.insert(tail.clone(), 1);
+                debug!("{:?} {:?}", head, tail);
             }
         }
         let answer = visited.len();
@@ -65,143 +37,64 @@ impl utils::Solution for Solution {
     }
 
     fn answer_part2(&self) -> Self::Result {
-        let mut head = (0, 0);
-        let mut tail1 = (0, 0);
-        let mut tail2 = (0, 0);
-        let mut tail3 = (0, 0);
-        let mut tail4 = (0, 0);
-        let mut tail5 = (0, 0);
-        let mut tail6 = (0, 0);
-        let mut tail7 = (0, 0);
-        let mut tail8 = (0, 0);
-        let mut tail9 = (0, 0);
+        let mut head = Position::new();
+        let mut rope = vec![Position::new(); 9];
 
         let mut visited = HashMap::new();
-        visited.insert(tail9, 1);
-        debug!(
-            "H{:?} 1{:?} 2{:?} 3{:?} 4{:?} 5{:?} 6{:?} 7{:?} 8{:?} 9{:?}",
-            head, tail1, tail2, tail3, tail4, tail5, tail6, tail7, tail8, tail9
-        );
+        visited.insert(rope.last().unwrap().clone(), 1);
+        debug!("H{:?} T{:?}", head, rope);
         for motion in &self.motions {
-            match motion {
-                Motion::R(count) => {
-                    for _ in 1..=*count {
-                        head.0 += 1;
-                        Self::move_tail(&head, &mut tail1);
-                        Self::move_tail(&tail1, &mut tail2);
-                        Self::move_tail(&tail2, &mut tail3);
-                        Self::move_tail(&tail3, &mut tail4);
-                        Self::move_tail(&tail4, &mut tail5);
-                        Self::move_tail(&tail5, &mut tail6);
-                        Self::move_tail(&tail6, &mut tail7);
-                        Self::move_tail(&tail7, &mut tail8);
-                        Self::move_tail(&tail8, &mut tail9);
-                        visited.insert(tail9, 1);
-                        debug!(
-                            "H{:?} 1{:?} 2{:?} 3{:?} 4{:?} 5{:?} 6{:?} 7{:?} 8{:?} 9{:?}",
-                            head, tail1, tail2, tail3, tail4, tail5, tail6, tail7, tail8, tail9
-                        );
-                    }
+            for _ in 1..=motion.count() {
+                motion.step(&mut head);
+                Self::move_tail(&head, &mut rope[0]);
+                let mut prev_tail = rope[0].clone();
+                for tail in rope.iter_mut().skip(1) {
+                    Self::move_tail(&prev_tail, tail);
+                    prev_tail = tail.clone();
                 }
-                Motion::L(count) => {
-                    for _ in 1..=*count {
-                        head.0 -= 1;
-                        Self::move_tail(&head, &mut tail1);
-                        Self::move_tail(&tail1, &mut tail2);
-                        Self::move_tail(&tail2, &mut tail3);
-                        Self::move_tail(&tail3, &mut tail4);
-                        Self::move_tail(&tail4, &mut tail5);
-                        Self::move_tail(&tail5, &mut tail6);
-                        Self::move_tail(&tail6, &mut tail7);
-                        Self::move_tail(&tail7, &mut tail8);
-                        Self::move_tail(&tail8, &mut tail9);
-                        visited.insert(tail9, 1);
-                        debug!(
-                            "H{:?} 1{:?} 2{:?} 3{:?} 4{:?} 5{:?} 6{:?} 7{:?} 8{:?} 9{:?}",
-                            head, tail1, tail2, tail3, tail4, tail5, tail6, tail7, tail8, tail9
-                        );
-                    }
-                }
-                Motion::U(count) => {
-                    for _ in 1..=*count {
-                        head.1 += 1;
-                        Self::move_tail(&head, &mut tail1);
-                        Self::move_tail(&tail1, &mut tail2);
-                        Self::move_tail(&tail2, &mut tail3);
-                        Self::move_tail(&tail3, &mut tail4);
-                        Self::move_tail(&tail4, &mut tail5);
-                        Self::move_tail(&tail5, &mut tail6);
-                        Self::move_tail(&tail6, &mut tail7);
-                        Self::move_tail(&tail7, &mut tail8);
-                        Self::move_tail(&tail8, &mut tail9);
-                        visited.insert(tail9, 1);
-                        debug!(
-                            "H{:?} 1{:?} 2{:?} 3{:?} 4{:?} 5{:?} 6{:?} 7{:?} 8{:?} 9{:?}",
-                            head, tail1, tail2, tail3, tail4, tail5, tail6, tail7, tail8, tail9
-                        );
-                    }
-                }
-                Motion::D(count) => {
-                    for _ in 1..=*count {
-                        head.1 -= 1;
-                        Self::move_tail(&head, &mut tail1);
-                        Self::move_tail(&tail1, &mut tail2);
-                        Self::move_tail(&tail2, &mut tail3);
-                        Self::move_tail(&tail3, &mut tail4);
-                        Self::move_tail(&tail4, &mut tail5);
-                        Self::move_tail(&tail5, &mut tail6);
-                        Self::move_tail(&tail6, &mut tail7);
-                        Self::move_tail(&tail7, &mut tail8);
-                        Self::move_tail(&tail8, &mut tail9);
-                        visited.insert(tail9, 1);
-                        debug!(
-                            "H{:?} 1{:?} 2{:?} 3{:?} 4{:?} 5{:?} 6{:?} 7{:?} 8{:?} 9{:?}",
-                            head, tail1, tail2, tail3, tail4, tail5, tail6, tail7, tail8, tail9
-                        );
-                    }
-                }
+                visited.insert(rope.last().unwrap().clone(), 1);
+                debug!("H{:?} T{:?}", head, rope);
             }
         }
-        // Implement for problem
         let answer = visited.len();
         Ok(answer)
     }
 }
 
 impl Solution {
-    fn move_tail(head: &(isize, isize), tail: &mut (isize, isize)) {
-        if head.1 == tail.1 {
-            if head.0 - tail.0 > 1 {
+    fn move_tail(head: &Position, tail: &mut Position) {
+        if head.y == tail.y {
+            if head.x - tail.x > 1 {
                 debug!("R");
-                tail.0 += 1;
-            } else if tail.0 - head.0 > 1 {
+                tail.x += 1;
+            } else if tail.x - head.x > 1 {
                 debug!("L");
-                tail.0 -= 1;
+                tail.x -= 1;
             }
-        } else if head.0 == tail.0 {
-            if head.1 - tail.1 > 1 {
+        } else if head.x == tail.x {
+            if head.y - tail.y > 1 {
                 debug!("U");
-                tail.1 += 1;
-            } else if tail.1 - head.1 > 1 {
+                tail.y += 1;
+            } else if tail.y - head.y > 1 {
                 debug!("D");
-                tail.1 -= 1;
+                tail.y -= 1;
             }
-        } else if (head.0 - tail.0).abs() > 1 || (head.1 - tail.1).abs() > 1 {
-            if head.0 > tail.0 && head.1 > tail.1 {
-                tail.0 += 1;
-                tail.1 += 1;
+        } else if (head.x - tail.x).abs() > 1 || (head.y - tail.y).abs() > 1 {
+            if head.x > tail.x && head.y > tail.y {
+                tail.x += 1;
+                tail.y += 1;
                 debug!("NE");
-            } else if head.0 > tail.0 && head.1 < tail.1 {
-                tail.0 += 1;
-                tail.1 -= 1;
+            } else if head.x > tail.x && head.y < tail.y {
+                tail.x += 1;
+                tail.y -= 1;
                 debug!("SE");
-            } else if head.0 < tail.0 && head.1 > tail.1 {
-                tail.0 -= 1;
-                tail.1 += 1;
+            } else if head.x < tail.x && head.y > tail.y {
+                tail.x -= 1;
+                tail.y += 1;
                 debug!("NW");
-            } else if head.0 < tail.0 && head.1 < tail.1 {
-                tail.0 -= 1;
-                tail.1 -= 1;
+            } else if head.x < tail.x && head.y < tail.y {
+                tail.x -= 1;
+                tail.y -= 1;
                 debug!("SW");
             }
         }
@@ -222,6 +115,18 @@ impl<T: std::io::Read> TryFrom<BufReader<T>> for Solution {
     }
 }
 
+#[derive(Debug, Hash, PartialEq, Eq, Clone)]
+struct Position {
+    x: isize,
+    y: isize,
+}
+
+impl Position {
+    fn new() -> Self {
+        Self { x: 0, y: 0 }
+    }
+}
+
 #[derive(Debug)]
 enum Motion {
     R(usize),
@@ -230,6 +135,25 @@ enum Motion {
     D(usize),
 }
 
+impl Motion {
+    fn count(&self) -> usize {
+        match self {
+            Motion::R(c) => *c,
+            Motion::L(c) => *c,
+            Motion::U(c) => *c,
+            Motion::D(c) => *c,
+        }
+    }
+
+    fn step(&self, point: &mut Position) {
+        match self {
+            Motion::R(_) => point.x += 1,
+            Motion::L(_) => point.x -= 1,
+            Motion::U(_) => point.y += 1,
+            Motion::D(_) => point.y -= 1,
+        }
+    }
+}
 impl FromStr for Motion {
     type Err = std::convert::Infallible;
 
