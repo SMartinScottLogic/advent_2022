@@ -5,7 +5,7 @@ use std::{
 };
 
 use itertools::Itertools;
-use log::{debug, info};
+use log::debug;
 
 #[derive(Debug)]
 pub struct Solution {
@@ -160,7 +160,6 @@ impl utils::Solution for Solution {
                         );
                     }
                 }
-                _ => unimplemented!(),
             }
         }
         // Implement for problem
