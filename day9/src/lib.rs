@@ -63,43 +63,23 @@ impl utils::Solution for Solution {
 
 impl Solution {
     fn move_tail(head: &Position, tail: &mut Position) {
-        if head.y == tail.y {
-            if head.x - tail.x > 1 {
-                debug!("R");
-                tail.x += 1;
-            } else if tail.x - head.x > 1 {
-                debug!("L");
-                tail.x -= 1;
+        let xdiff = head.x - tail.x;
+        let ydiff = head.y - tail.y;
+        if ydiff == 0 {
+            if xdiff.abs() > 1 {
+                tail.x += xdiff.signum();
             }
-        } else if head.x == tail.x {
-            if head.y - tail.y > 1 {
-                debug!("U");
-                tail.y += 1;
-            } else if tail.y - head.y > 1 {
-                debug!("D");
-                tail.y -= 1;
+        } else if xdiff == 0 {
+            if ydiff.abs() > 1 {
+                tail.y += ydiff.signum();
             }
-        } else if (head.x - tail.x).abs() > 1 || (head.y - tail.y).abs() > 1 {
-            if head.x > tail.x && head.y > tail.y {
-                tail.x += 1;
-                tail.y += 1;
-                debug!("NE");
-            } else if head.x > tail.x && head.y < tail.y {
-                tail.x += 1;
-                tail.y -= 1;
-                debug!("SE");
-            } else if head.x < tail.x && head.y > tail.y {
-                tail.x -= 1;
-                tail.y += 1;
-                debug!("NW");
-            } else if head.x < tail.x && head.y < tail.y {
-                tail.x -= 1;
-                tail.y -= 1;
-                debug!("SW");
-            }
+        } else if xdiff.abs() > 1 || ydiff.abs() > 1 {
+            tail.x += xdiff.signum();
+            tail.y += ydiff.signum();
         }
     }
 }
+
 impl<T: std::io::Read> TryFrom<BufReader<T>> for Solution {
     type Error = std::io::Error;
 
