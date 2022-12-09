@@ -1,6 +1,6 @@
 use anyhow::Result;
-use log::{error, info};
 use day9::Solution;
+use log::{error, info};
 use utils::{load, BaseName, Solution as UtilsSolution};
 use yansi::Paint;
 
@@ -18,6 +18,10 @@ fn main() -> Result<()> {
         .to_owned();
 
     let filename = format!("input/{basename}.sample");
+    if let Err(e) = run(&filename) {
+        error!("Failed running against '{filename}': {e:?}");
+    }
+    let filename = format!("input/{basename}.sample2");
     if let Err(e) = run(&filename) {
         error!("Failed running against '{filename}': {e:?}");
     }
