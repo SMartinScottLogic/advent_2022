@@ -30,11 +30,17 @@ impl Matrix {
     }
 
     pub fn display(&self) {
+        self.display_with_mapping(|v| format!("{v}"));
+    }
+    pub fn display_with_mapping<F>(&self, mapping: F)
+    where
+        F: Fn(i64) -> String,
+    {
         for y in 0..=self.max_y {
             let mut line = String::new();
             for x in 0..=self.max_x {
                 let v = self.get(x, y).unwrap_or(&0);
-                let v = format!("{v}");
+                let v = mapping(*v);
                 line.push_str(&v);
             }
             println!("{line}");
