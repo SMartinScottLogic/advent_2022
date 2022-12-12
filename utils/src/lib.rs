@@ -1,7 +1,9 @@
+mod basename;
+mod graph;
 mod matrix;
 mod solution;
-mod basename;
 
-pub use matrix::Matrix;
-pub use solution::{Solution, load};
 pub use basename::BaseName;
+pub use graph::dijkstra;
+pub use matrix::Matrix;
+pub use solution::{load, Solution};

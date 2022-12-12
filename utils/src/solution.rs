@@ -1,4 +1,3 @@
-
 pub trait Solution {
     type Result;
 
