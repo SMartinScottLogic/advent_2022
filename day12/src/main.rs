@@ -1,6 +1,6 @@
 use anyhow::Result;
-use log::{error, info};
 use day12::Solution;
+use log::{error, info};
 use utils::{load, BaseName, Solution as UtilsSolution};
 use yansi::Paint;
 
@@ -21,7 +21,7 @@ fn main() -> Result<()> {
     if let Err(e) = run(&filename) {
         error!("Failed running against '{filename}': {e:?}");
     }
-    let filename = format!("input/{basename}.fullish");
+    let filename = format!("input/{basename}.full");
     if let Err(e) = run(&filename) {
         error!("Failed running against '{filename}': {e:?}");
     }
