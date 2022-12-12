@@ -23,11 +23,34 @@ impl utils::Solution for Solution {
     fn analyse(&mut self) {}
 
     fn answer_part1(&self) -> Self::Result {
-        let answer = self.shortest_path(self.startx, self.starty).unwrap();
+        let mut cost = Matrix::new();
+        let mut startx = 0;
+        let mut starty = 0;
+        for ((x, y), v) in &self.grid {
+            if *v == 'S' {
+                cost.set(*x as isize, *y as isize, 0);
+                startx = *x;
+                starty = *y;
+            }
+        }
+        let answer = self.shortest_path(startx, starty, cost).unwrap();
         Ok(answer)
     }
 
     fn answer_part2(&self) -> Self::Result {
+        let mut cost = Matrix::new();
+        let mut startx = 0;
+        let mut starty = 0;
+        for ((x, y), v) in &self.grid {
+            if *v == 'S' || *v == 'a' {
+                cost.set(*x as isize, *y as isize, 0);
+                startx = *x;
+                starty = *y;
+            }
+        }
+
+        let answer = self.shortest_path(startx, starty, cost).unwrap();
+        /*
         let answer = self
             .grid
             .iter()
@@ -35,13 +58,14 @@ impl utils::Solution for Solution {
             .flat_map(|((x, y), _)| self.shortest_path(*x, *y))
             .min()
             .unwrap();
+        */
         Ok(answer)
     }
 }
 
 impl Solution {
-    fn shortest_path(&self, startx: usize, starty: usize) -> Option<ResultType> {
-        let mut cost = Matrix::new();
+    fn shortest_path(&self, startx: usize, starty: usize, mut cost: Matrix) -> Option<ResultType> {
+        //let mut cost = Matrix::new();
         let mut visited = Matrix::new();
         cost.set(startx as isize, starty as isize, 0);
 
@@ -76,7 +100,6 @@ impl Solution {
                     let tposx = tposx as usize;
                     let tposy = tposy as usize;
                     let t_height = self.grid.get(&(tposx, tposy)).unwrap();
-                    //if *t_height != 'E' {
                     let t_height = heightvals.get(t_height).unwrap();
                     if t_height > curheight && t_height - curheight > 1 {
                         debug!(
@@ -89,10 +112,9 @@ impl Solution {
                         "can reach ({},{})={} from ({},{})={}",
                         tposx, tposy, t_height, posx, posy, curheight
                     );
-                    //}
                     let tcost = cost.get(tposx as isize, tposy as isize);
                     match tcost {
-                        Some(c) if c < &curstep => {}
+                        Some(c) if c < &(1 + curstep) => {}
                         Some(c) => {
                             debug!("set ({},{}) to {} from {}", tposx, tposy, curstep + 1, c);
                             cost.set(tposx as isize, tposy as isize, curstep + 1);
