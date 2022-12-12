@@ -50,22 +50,12 @@ impl utils::Solution for Solution {
         }
 
         let answer = self.shortest_path(startx, starty, cost).unwrap();
-        /*
-        let answer = self
-            .grid
-            .iter()
-            .filter(|(_, v)| *v == &'a')
-            .flat_map(|((x, y), _)| self.shortest_path(*x, *y))
-            .min()
-            .unwrap();
-        */
         Ok(answer)
     }
 }
 
 impl Solution {
     fn shortest_path(&self, startx: usize, starty: usize, mut cost: Matrix) -> Option<ResultType> {
-        //let mut cost = Matrix::new();
         let mut visited = Matrix::new();
         cost.set(startx as isize, starty as isize, 0);
 
