@@ -4,7 +4,6 @@ use std::{
 };
 
 use log::debug;
-use utils::Matrix;
 
 type ResultType = i64;
 #[derive(Debug, Default)]
@@ -23,74 +22,53 @@ impl utils::Solution for Solution {
     fn analyse(&mut self) {}
 
     fn answer_part1(&self) -> Self::Result {
-        let mut cost = Matrix::new();
-        let mut startx = 0;
-        let mut starty = 0;
-        for ((x, y), v) in &self.grid {
-            if *v == 'S' {
-                cost.set(*x as isize, *y as isize, 0);
-                startx = *x;
-                starty = *y;
-            }
-        }
-        let answer = self.shortest_path(startx, starty, cost).unwrap();
+        let initial_scorer = |node: &(usize, usize)| {
+            self.grid
+                .get(node)
+                .and_then(|v| if *v == 'S' { Some(0_i64) } else { None })
+        };
+        let answer = self.shortest_path(initial_scorer).unwrap();
         Ok(answer)
     }
 
     fn answer_part2(&self) -> Self::Result {
-        let mut cost = Matrix::new();
-        let mut startx = 0;
-        let mut starty = 0;
-        for ((x, y), v) in &self.grid {
-            if *v == 'S' || *v == 'a' {
-                cost.set(*x as isize, *y as isize, 0);
-                startx = *x;
-                starty = *y;
-            }
-        }
-
-        let answer = self.shortest_path(startx, starty, cost).unwrap();
-        /*
-        let answer = self
-            .grid
-            .iter()
-            .filter(|(_, v)| *v == &'a')
-            .flat_map(|((x, y), _)| self.shortest_path(*x, *y))
-            .min()
-            .unwrap();
-        */
+        let initial_scorer = |node: &(usize, usize)| {
+            self.grid.get(node).and_then(|v| {
+                if *v == 'S' || *v == 'a' {
+                    Some(0_i64)
+                } else {
+                    None
+                }
+            })
+        };
+        let answer = self.shortest_path(initial_scorer).unwrap();
         Ok(answer)
     }
 }
 
 impl Solution {
-    fn shortest_path(&self, startx: usize, starty: usize, mut cost: Matrix) -> Option<ResultType> {
-        //let mut cost = Matrix::new();
-        let mut visited = Matrix::new();
-        cost.set(startx as isize, starty as isize, 0);
-
-        let mut posx = startx;
-        let mut posy = starty;
-        let mut curstep = 0;
+    fn shortest_path<F>(&self, initial_scorer: F) -> Option<ResultType>
+    where
+        F: Fn(&(usize, usize)) -> Option<ResultType>,
+    {
         let heightvals: HashMap<_, _> = "abcdefghijklmnopqrstuvwxyzES"
             .chars()
             .enumerate()
             .map(|(a, b)| (b, a))
             .collect();
-        let answer = loop {
-            if posx == self.endx && posy == self.endy {
-                break curstep;
-            }
-            visited.set(posx as isize, posy as isize, 1);
-            let curheight = self.grid.get(&(posx, posy)).unwrap();
+        let nodes = self.grid.keys().copied().collect();
+        let get_neighbours = |node: &(usize, usize)| {
+            let (x, y) = node;
+            let mut neighbours = Vec::new();
+            let curheight = self.grid.get(&(*x, *y)).unwrap();
             let curheight = heightvals.get(curheight).unwrap();
             for dy in -1..=1 {
                 for dx in -1..=1 {
                     if ((dx + dy) as i32).abs() != 1 {
                         continue;
                     }
-                    let tposx = posx as isize + dx;
-                    let tposy = posy as isize + dy;
+                    let tposx = *x as isize + dx;
+                    let tposy = *y as isize + dy;
                     if tposx < 0 || tposy < 0 {
                         continue;
                     }
@@ -99,70 +77,28 @@ impl Solution {
                     }
                     let tposx = tposx as usize;
                     let tposy = tposy as usize;
-                    let t_height = self.grid.get(&(tposx, tposy)).unwrap();
+                    let t_height = self.grid.get(&(tposx, tposy as usize)).unwrap();
                     let t_height = heightvals.get(t_height).unwrap();
                     if t_height > curheight && t_height - curheight > 1 {
                         debug!(
                             "can't reach ({},{})={} from ({},{})={}",
-                            tposx, tposy, t_height, posx, posy, curheight
+                            tposx, tposy, t_height, x, y, curheight
                         );
                         continue;
                     }
                     debug!(
                         "can reach ({},{})={} from ({},{})={}",
-                        tposx, tposy, t_height, posx, posy, curheight
+                        tposx, tposy, t_height, x, y, curheight
                     );
-                    let tcost = cost.get(tposx as isize, tposy as isize);
-                    match tcost {
-                        Some(c) if c < &(1 + curstep) => {}
-                        Some(c) => {
-                            debug!("set ({},{}) to {} from {}", tposx, tposy, curstep + 1, c);
-                            cost.set(tposx as isize, tposy as isize, curstep + 1);
-                        }
-                        _ => {
-                            debug!("set ({},{}) to {}", tposx, tposy, curstep + 1);
-                            cost.set(tposx as isize, tposy as isize, curstep + 1);
-                        }
-                    }
+                    neighbours.push((tposx, tposy));
                 }
             }
-            let mut bestcost = i64::MAX;
-            let mut bestx = 0;
-            let mut besty = 0;
-            for (x, y) in self.grid.keys() {
-                if visited.get(*x as isize, *y as isize).is_none() {
-                    match cost.get(*x as isize, *y as isize) {
-                        Some(c) if c < &bestcost => {
-                            bestx = *x;
-                            besty = *y;
-                            bestcost = *c;
-                        }
-                        _ => {}
-                    }
-                };
-            }
-            if bestcost == i64::MAX {
-                return None;
-            }
-            posx = bestx;
-            posy = besty;
-            debug!("next: ({posx}, {posy}) with {bestcost}");
-            curstep = bestcost;
+            debug!("get_neighbours of ({}, {}): {:?}", x, y, neighbours);
+            neighbours.into_iter()
         };
-
-        for y in 0..=self.maxy {
-            let mut line = String::new();
-            for x in 0..=self.maxx {
-                let s = match cost.get(x as isize, y as isize) {
-                    None => "..".to_string(),
-                    Some(c) => format!("{:02}", c),
-                };
-                line.push_str(&s);
-                line.push(' ');
-            }
-            debug!("{}: {}", y, line);
-        }
-        Some(answer)
+        let is_end =
+            |node: &(usize, usize)| self.grid.get(node).map(|v| *v == 'E').unwrap_or(false);
+        utils::dijkstra(&nodes, initial_scorer, get_neighbours, is_end)
     }
 }
 

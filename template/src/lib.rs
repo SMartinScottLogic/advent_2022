@@ -1,10 +1,12 @@
 use std::io::{BufRead, BufReader};
 
+type ResultType = u64;
+
 #[derive(Debug)]
 pub struct Solution {}
 
 impl utils::Solution for Solution {
-    type Result = anyhow::Result<u64>;
+    type Result = anyhow::Result<ResultType>;
     fn analyse(&mut self) {}
 
     fn answer_part1(&self) -> Self::Result {
