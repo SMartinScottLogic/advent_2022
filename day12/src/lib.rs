@@ -33,9 +33,13 @@ impl utils::Solution for Solution {
 
     fn answer_part2(&self) -> Self::Result {
         let initial_scorer = |node: &(usize, usize)| {
-            self.grid
-                .get(node)
-                .and_then(|v| if *v == 'S' || *v == 'a' { Some(0_i64) } else { None })
+            self.grid.get(node).and_then(|v| {
+                if *v == 'S' || *v == 'a' {
+                    Some(0_i64)
+                } else {
+                    None
+                }
+            })
         };
         let answer = self.shortest_path(initial_scorer).unwrap();
         Ok(answer)
@@ -43,8 +47,9 @@ impl utils::Solution for Solution {
 }
 
 impl Solution {
-    fn shortest_path<F>(&self, initial_scorer: F) -> Option<ResultType> 
-    where F: Fn(&(usize, usize)) -> Option<ResultType>,
+    fn shortest_path<F>(&self, initial_scorer: F) -> Option<ResultType>
+    where
+        F: Fn(&(usize, usize)) -> Option<ResultType>,
     {
         let heightvals: HashMap<_, _> = "abcdefghijklmnopqrstuvwxyzES"
             .chars()
@@ -91,12 +96,8 @@ impl Solution {
             debug!("get_neighbours of ({}, {}): {:?}", x, y, neighbours);
             neighbours.into_iter()
         };
-        let is_end = |node: &(usize, usize)| {
-            self.grid
-                .get(node)
-                .map(|v| *v == 'E')
-                .unwrap_or(false)
-        };
+        let is_end =
+            |node: &(usize, usize)| self.grid.get(node).map(|v| *v == 'E').unwrap_or(false);
         utils::dijkstra(&nodes, initial_scorer, get_neighbours, is_end)
     }
 }

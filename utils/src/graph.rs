@@ -1,12 +1,21 @@
 use std::collections::{HashMap, HashSet};
 
-pub fn dijkstra<N, IS, IE, GN, NEIGH, R>(nodes: &Vec<N>, initial_score: IS, get_neighbours: GN, is_end: IE) -> Option<R>
+pub fn dijkstra<N, IS, IE, GN, NEIGH, R>(
+    nodes: &Vec<N>,
+    initial_score: IS,
+    get_neighbours: GN,
+    is_end: IE,
+) -> Option<R>
 where
     IS: Fn(&N) -> Option<R>,
     GN: Fn(&N) -> NEIGH,
     IE: Fn(&N) -> bool,
     N: std::fmt::Debug + std::cmp::Eq + std::marker::Copy + std::hash::Hash,
-    R: std::fmt::Debug + std::cmp::PartialOrd + std::marker::Copy + std::ops::Add<Output = R> + HasOne,
+    R: std::fmt::Debug
+        + std::cmp::PartialOrd
+        + std::marker::Copy
+        + std::ops::Add<Output = R>
+        + HasOne,
     NEIGH: std::iter::Iterator<Item = N>,
 {
     let mut scores = HashMap::new();
