@@ -1,6 +1,6 @@
 use anyhow::Result;
-use log::{error, info};
 use day14::Solution;
+use log::{error, info};
 use utils::{load, BaseName, Solution as UtilsSolution};
 use yansi::Paint;
 
