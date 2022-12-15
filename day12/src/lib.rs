@@ -5,7 +5,7 @@ use std::{
 
 use log::debug;
 
-type ResultType = i64;
+pub type ResultType = i64;
 #[derive(Debug, Default)]
 pub struct Solution {
     grid: HashMap<(usize, usize), char>,
