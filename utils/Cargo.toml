@@ -8,3 +8,7 @@ edition = "2021"
 [dependencies]
 # A lightweight logging facade for Rust 
 log = "0.4.14"
+# Flexible concrete Error type built on std::error::Error
+anyhow = "1.0.51"
+# A dead simple ANSI terminal color painting library.
+yansi = "0.5"

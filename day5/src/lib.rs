@@ -13,9 +13,9 @@ pub struct Solution {
 
 impl utils::Solution for Solution {
     type Result = anyhow::Result<String>;
-    fn analyse(&mut self) {}
+    fn analyse(&mut self, _is_full: bool) {}
 
-    fn answer_part1(&self) -> Self::Result {
+    fn answer_part1(&self, _is_full: bool) -> Self::Result {
         let mut stacks = self.stacks.clone();
         for instruction in &self.instructions {
             for _i in 1..=instruction.count {
@@ -32,7 +32,7 @@ impl utils::Solution for Solution {
         Ok(answer)
     }
 
-    fn answer_part2(&self) -> Self::Result {
+    fn answer_part2(&self, _is_full: bool) -> Self::Result {
         let mut stacks = self.stacks.clone();
         for instruction in &self.instructions {
             let mut temp_stack = VecDeque::new();

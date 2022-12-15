@@ -13,14 +13,14 @@ pub struct Solution {
 
 impl utils::Solution for Solution {
     type Result = anyhow::Result<ResultType>;
-    fn analyse(&mut self) {}
+    fn analyse(&mut self, _is_full: bool) {}
 
-    fn answer_part1(&self) -> Self::Result {
+    fn answer_part1(&self, _is_full: bool) -> Self::Result {
         let answer = self.drop_sand();
         Ok(answer)
     }
 
-    fn answer_part2(&self) -> Self::Result {
+    fn answer_part2(&self, _is_full: bool) -> Self::Result {
         let answer = self.drop_sand_to_floor();
         Ok(answer)
     }
