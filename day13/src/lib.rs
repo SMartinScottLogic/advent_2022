@@ -12,9 +12,9 @@ pub struct Solution {
 
 impl utils::Solution for Solution {
     type Result = anyhow::Result<ResultType>;
-    fn analyse(&mut self) {}
+    fn analyse(&mut self, _is_full: bool) {}
 
-    fn answer_part1(&self) -> Self::Result {
+    fn answer_part1(&self, _is_full: bool) -> Self::Result {
         let mut answer = 0;
         for (i, (lhs, rhs)) in self.pairs.iter().enumerate() {
             let r = Self::compare(lhs, rhs);
@@ -27,7 +27,7 @@ impl utils::Solution for Solution {
         Ok(answer)
     }
 
-    fn answer_part2(&self) -> Self::Result {
+    fn answer_part2(&self, _is_full: bool) -> Self::Result {
         let mut packets = vec!["[[2]]", "[[6]]"];
         for (a, b) in &self.pairs {
             packets.push(a);

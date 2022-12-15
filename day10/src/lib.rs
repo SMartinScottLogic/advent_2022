@@ -13,9 +13,9 @@ pub struct Solution {
 
 impl utils::Solution for Solution {
     type Result = anyhow::Result<i64>;
-    fn analyse(&mut self) {}
+    fn analyse(&mut self, _is_full: bool) {}
 
-    fn answer_part1(&self) -> Self::Result {
+    fn answer_part1(&self, _is_full: bool) -> Self::Result {
         let mut answer = 0;
         let mut cycle = 0;
         let mut reg_x = 1;
@@ -40,7 +40,7 @@ impl utils::Solution for Solution {
         Ok(answer)
     }
 
-    fn answer_part2(&self) -> Self::Result {
+    fn answer_part2(&self, _is_full: bool) -> Self::Result {
         let mut crt = Matrix::new();
         let mut reg_x = 1;
         let mut x = 0;

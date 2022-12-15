@@ -18,21 +18,21 @@ fn main() -> Result<()> {
         .to_owned();
 
     let filename = format!("input/{basename}.sample");
-    if let Err(e) = run(&filename) {
+    if let Err(e) = run(&filename, false) {
         error!("Failed running against '{filename}': {e:?}");
     }
     let filename = format!("input/{basename}.sample2");
-    if let Err(e) = run(&filename) {
+    if let Err(e) = run(&filename, false) {
         error!("Failed running against '{filename}': {e:?}");
     }
     let filename = format!("input/{basename}.full");
-    if let Err(e) = run(&filename) {
+    if let Err(e) = run(&filename, true) {
         error!("Failed running against '{filename}': {e:?}");
     }
     Ok(())
 }
 
-fn run(filename: &str) -> Result<()> {
+fn run(filename: &str, is_full: bool) -> Result<()> {
     let mut solution = load::<Solution>(filename)?;
     info!(
         "{}{}: {:?}",
@@ -40,16 +40,16 @@ fn run(filename: &str) -> Result<()> {
         Paint::bold(Paint::yellow("solution")),
         solution
     );
-    solution.analyse();
+    solution.analyse(is_full);
     info!(
         "{}part1 answer is {}",
         Paint::masked("🎅 "),
-        Paint::bold(Paint::red(solution.answer_part1()?))
+        Paint::bold(Paint::red(solution.answer_part1(is_full)?))
     );
     info!(
         "{}part2 answer is {}",
         Paint::masked("🎅 "),
-        Paint::bold(Paint::red(solution.answer_part2()?))
+        Paint::bold(Paint::red(solution.answer_part2(is_full)?))
     );
 
     Ok(())

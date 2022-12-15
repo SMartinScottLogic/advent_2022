@@ -61,12 +61,12 @@ impl Solution {
 
 impl utils::Solution for Solution {
     type Result = anyhow::Result<u64>;
-    fn analyse(&mut self) {
+    fn analyse(&mut self, _is_full: bool) {
         self.treesize = self.treesize();
         debug!("sizes {:?}", self.treesize());
     }
 
-    fn answer_part1(&self) -> Self::Result {
+    fn answer_part1(&self, _is_full: bool) -> Self::Result {
         let answer = self
             .treesize
             .iter()
@@ -76,7 +76,7 @@ impl utils::Solution for Solution {
         Ok(answer)
     }
 
-    fn answer_part2(&self) -> Self::Result {
+    fn answer_part2(&self, _is_full: bool) -> Self::Result {
         let unuseddisk = 70000000 - self.treesize.get("/").unwrap();
         let required = 30000000 - unuseddisk;
         debug!("unused={} required={}", unuseddisk, required);

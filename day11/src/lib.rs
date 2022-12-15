@@ -16,18 +16,18 @@ pub struct Solution {
 
 impl utils::Solution for Solution {
     type Result = anyhow::Result<ResultType>;
-    fn analyse(&mut self) {
+    fn analyse(&mut self, _is_full: bool) {
         let monkeys = self.monkeys.clone();
         self.answer_part1 = self.analyse_part(3, 20);
         self.monkeys = monkeys;
         self.answer_part2 = self.analyse_part(1, 10000);
     }
 
-    fn answer_part1(&self) -> Self::Result {
+    fn answer_part1(&self, _is_full: bool) -> Self::Result {
         Ok(self.answer_part1)
     }
 
-    fn answer_part2(&self) -> Self::Result {
+    fn answer_part2(&self, _is_full: bool) -> Self::Result {
         Ok(self.answer_part2)
     }
 }

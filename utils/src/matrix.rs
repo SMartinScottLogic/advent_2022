@@ -1,4 +1,4 @@
-use std::cmp::max;
+use std::cmp::{max, min};
 use std::collections::HashMap;
 
 #[derive(Debug, Default)]
@@ -6,6 +6,8 @@ pub struct Matrix {
     data: HashMap<(isize, isize), i64>,
     max_x: isize,
     max_y: isize,
+    min_x: isize,
+    min_y: isize,
 }
 
 impl Matrix {
@@ -31,9 +33,12 @@ impl Matrix {
         *self.data.entry((x, y)).or_insert(0) = value;
         self.max_x = max(self.max_x, x);
         self.max_y = max(self.max_y, y);
+        self.min_x = min(self.min_x, x);
+        self.min_y = min(self.min_y, y);
     }
 
     pub fn dimensions(&self) -> (isize, isize) {
+        // TODO: Expand to include minima
         (self.max_x, self.max_y)
     }
 
@@ -44,9 +49,10 @@ impl Matrix {
     where
         F: Fn(i64) -> String,
     {
-        for y in 0..=self.max_y {
+        for y in self.min_y..=self.max_y {
             let mut line = String::new();
-            for x in 0..=self.max_x {
+            line.push_str(&format!("{} ", y));
+            for x in self.min_x..=self.max_x {
                 let v = self.get(x, y).unwrap_or(&0);
                 let v = mapping(*v);
                 line.push_str(&v);

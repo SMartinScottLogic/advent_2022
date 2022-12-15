@@ -12,14 +12,14 @@ pub struct Solution {
 
 impl utils::Solution for Solution {
     type Result = anyhow::Result<usize>;
-    fn analyse(&mut self) {}
+    fn analyse(&mut self, _is_full: bool) {}
 
-    fn answer_part1(&self) -> Self::Result {
+    fn answer_part1(&self, _is_full: bool) -> Self::Result {
         self.detect_distinct_window(4)
             .ok_or_else(|| anyhow!("nothing"))
     }
 
-    fn answer_part2(&self) -> Self::Result {
+    fn answer_part2(&self, _is_full: bool) -> Self::Result {
         self.detect_distinct_window(14)
             .ok_or_else(|| anyhow!("nothing"))
     }

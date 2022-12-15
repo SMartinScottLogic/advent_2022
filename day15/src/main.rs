@@ -1,5 +1,5 @@
 use anyhow::Result;
-use template::{ResultType, Solution};
+use day15::{ResultType, Solution};
 
 fn main() -> Result<()> {
     env_logger::init();
