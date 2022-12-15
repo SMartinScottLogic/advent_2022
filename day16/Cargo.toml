@@ -1,0 +1,20 @@
+[package]
+name = "day16"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+# A lightweight logging facade for Rust 
+log = "0.4.14"
+# A logging implementation for `log` which is configured via an environment variable. 
+env_logger = "0.10.0"
+# Flexible concrete Error type built on std::error::Error
+anyhow = "1.0.51"
+# A dead simple ANSI terminal color painting library.
+yansi = "0.5"
+itertools = "0.10.5"
+
+[dependencies.utils]
+path = "../utils"
