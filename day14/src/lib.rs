@@ -4,7 +4,7 @@ use itertools::Itertools;
 use log::debug;
 use utils::Matrix;
 
-type ResultType = usize;
+pub type ResultType = usize;
 
 #[derive(Debug, Default)]
 pub struct Solution {

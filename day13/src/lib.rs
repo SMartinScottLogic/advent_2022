@@ -3,7 +3,7 @@ use std::io::{BufRead, BufReader};
 use itertools::Itertools;
 use log::debug;
 
-type ResultType = usize;
+pub type ResultType = usize;
 
 #[derive(Debug, Default)]
 pub struct Solution {
