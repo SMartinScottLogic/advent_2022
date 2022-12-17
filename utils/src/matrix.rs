@@ -42,6 +42,16 @@ impl Matrix {
         (self.max_x, self.max_y)
     }
 
+    pub fn max_x(&self) -> isize {
+        // TODO: Expand to include minima
+        self.max_x
+    }
+
+    pub fn max_y(&self) -> isize {
+        // TODO: Expand to include minima
+        self.max_y
+    }
+
     pub fn display(&self) {
         self.display_with_mapping(|v| format!("{v}"));
     }
