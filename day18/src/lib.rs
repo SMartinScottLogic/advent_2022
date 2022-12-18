@@ -103,7 +103,6 @@ impl utils::Solution for Solution {
             .collect();
 
         let answer = Self::uncovered(&cubes);
-        info!("answer = {answer}");
 
         Ok(answer)
     }
