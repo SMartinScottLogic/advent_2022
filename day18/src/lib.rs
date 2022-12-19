@@ -5,7 +5,7 @@ use std::{
 };
 
 use itertools::Itertools;
-use log::{debug, info};
+use log::debug;
 
 pub type ResultType = usize;
 
