@@ -59,8 +59,9 @@ where
 {
     let mut solution = load::<S>(filename)?;
     info!(
-        "{}{}: {:?}",
+        "{}{} {}: {:?}",
         Paint::masked("🎄 "),
+        Paint::bold(Paint::green(filename)),
         Paint::bold(Paint::yellow("solution")),
         solution
     );
