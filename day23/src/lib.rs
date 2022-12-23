@@ -1,13 +1,16 @@
-use std::{io::{BufRead, BufReader}, collections::{HashMap, HashSet}, hash::Hash};
+use std::{
+    collections::{HashMap, HashSet},
+    io::{BufRead, BufReader},
+};
 
 use itertools::Itertools;
-use log::{info, debug};
+use log::debug;
 
 pub type ResultType = i64;
 
 #[derive(Debug, Default)]
 pub struct Solution {
-    grove: HashMap<(i64, i64), char>
+    grove: HashMap<(i64, i64), char>,
 }
 
 impl utils::Solution for Solution {
@@ -24,9 +27,9 @@ impl utils::Solution for Solution {
 
         let (xmin, xmax) = elves.iter().map(|p| p.0).minmax().into_option().unwrap();
         let (ymin, ymax) = elves.iter().map(|p| p.1).minmax().into_option().unwrap();
-    
+
         debug!("{elves:?}");
-        println!("{} in ({},{})-({},{})", elves.len(), xmin, ymin, xmax, ymax);
+        debug!("{} in ({},{})-({},{})", elves.len(), xmin, ymin, xmax, ymax);
         let non_elves = (xmax - xmin + 1) * (ymax - ymin + 1) - elves.len() as i64;
         Ok(non_elves)
     }
@@ -70,22 +73,16 @@ impl Solution {
             let mut has_neighbour = false;
             for dy in -1..=1 {
                 for dx in -1..=1 {
-                    if dx==0 && dy == 0 {
+                    if dx == 0 && dy == 0 {
                         continue;
                     }
-                    if elves.contains(&(x+dx, y+dy)) {
+                    if elves.contains(&(x + dx, y + dy)) {
                         has_neighbour = true;
-                        if *x == 51 && step == 4 {
-                            println!("elf @ ({},{} has neighbour @ ({},{})", x, y, x+dx, y+dy);
-                        }
                     }
                 }
             }
             if !has_neighbour {
                 continue;
-            }
-            if *x == 51 && step == 4 {
-                println!("elf @ ({x},{y} can propose");
             }
             debug!("elf @ ({x},{y}) can propose");
             let mut dir = vec!["North", "South", "West", "East"];
@@ -95,25 +92,19 @@ impl Solution {
                     "North" | "South" => (-1, 1),
                     "East" => (1, 1),
                     "West" => (-1, -1),
-                    _ => unreachable!()
+                    _ => unreachable!(),
                 };
                 let (miny, maxy) = match d {
                     "North" => (1, 1),
                     "South" => (-1, -1),
                     "East" | "West" => (-1, 1),
-                    _ => unreachable!()
+                    _ => unreachable!(),
                 };
-                if *x == 51 && step == 4 {
-                    println!("elf @ ({x},{y} : {d}: ({minx},{miny}) - ({maxx},{maxy})");
-                }
                 has_neighbour = false;
                 for dy in miny..=maxy {
                     for dx in minx..=maxx {
-                        if elves.contains(&(x+dx,y+dy)) {
+                        if elves.contains(&(x + dx, y + dy)) {
                             has_neighbour = true;
-                            if *x == 51 && step == 4 {
-                                println!("elf @ ({},{}) : {}: has neighbour @ ({}, {})", x, y, d, x+dx, y+dy);
-                            }
                         }
                     }
                 }
@@ -125,13 +116,10 @@ impl Solution {
                     "South" => (0, -1),
                     "East" => (1, 0),
                     "West" => (-1, 0),
-                    _ => unreachable!()
+                    _ => unreachable!(),
                 };
                 debug!("elf @ ({x},{y}) proposes {d}");
-                if *x == 51 && step == 4 {
-                    println!("elf @ ({},{}) proposes {} to ({}, {})", x, y, d, x+dx, y+dy);
-                }
-                let e = proposals.entry((x+dx, y+dy)).or_insert_with(Vec::new);
+                let e = proposals.entry((x + dx, y + dy)).or_insert_with(Vec::new);
                 e.push((*x, *y));
                 break;
             }
@@ -145,14 +133,13 @@ impl Solution {
             }
             let (x, y) = sources[0];
             debug!("elf move from ({x},{y}) to ({tx},{ty})");
-            if step == 4 { println!("Move {:?} to {:?}", (x, y), (tx, ty)); }
             assert!(elves.remove(&(x, y)));
             assert!(elves.insert((tx, ty)));
             changed = true;
         }
         debug!("P{step}: {elves:?}");
         (elves, changed)
-}
+    }
 }
 
 impl<T: std::io::Read> TryFrom<BufReader<T>> for Solution {
