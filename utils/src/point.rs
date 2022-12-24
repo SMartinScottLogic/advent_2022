@@ -7,15 +7,15 @@ pub struct Point {
 }
 
 impl Point {
-    pub const N: Self = Self { x: -1, y: 0 };
-    pub const S: Self = Self { x: 1, y: 0 };
-    pub const E: Self = Self { x: 0, y: 1 };
-    pub const W: Self = Self { x: 0, y: -1 };
+    pub const N: Self = Self { x: 0, y: -1 };
+    pub const S: Self = Self { x: 0, y: 1 };
+    pub const E: Self = Self { x: 1, y: 0 };
+    pub const W: Self = Self { x: -1, y: 0 };
 
-    pub const NE: Self = Self { x: -1, y: 1 };
+    pub const NE: Self = Self { x: 1, y: -1 };
     pub const NW: Self = Self { x: -1, y: -1 };
     pub const SE: Self = Self { x: 1, y: 1 };
-    pub const SW: Self = Self { x: 1, y: -1 };
+    pub const SW: Self = Self { x: -1, y: 1 };
 
     pub fn new(x: i64, y: i64) -> Self {
         Self { x, y }
